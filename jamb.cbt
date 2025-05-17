@@ -1,0 +1,51 @@
+<?php
+// Define quiz questions and answers
+$questions = [
+    "What is the capital of France?" => [
+        "options" => ["Paris", "London", "Berlin", "Madrid"],
+        "answer" => "Paris"
+    ],
+    "Which planet is known as the Red Planet?" => [
+        "options" => ["Earth", "Mars", "Jupiter", "Saturn"],
+        "answer" => "Mars"
+    ],
+    "What is 2 + 2?" => [
+        "options" => ["3", "4", "5", "6"],
+        "answer" => "4"
+    ]
+];
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $score = 0;
+    $i = 0;
+    foreach ($questions as $question => $data) {
+        if (isset($_POST["q$i"]) && $_POST["q$i"] === $data["answer"]) {
+            $score++;
+        }
+        $i++;
+    }
+
+    echo "<h2>Your Score: $score / " . count($questions) . "</h2>";
+    echo "<a href='quiz.php'>Try Again</a>";
+    exit;
+}
+?>
+
+<form method="post">
+    <?php
+    $i = 0;
+    foreach ($questions as $question => $data) {
+        echo "<fieldset>";
+        echo "<legend>$question</legend>";
+        foreach ($data["options"] as $option) {
+            echo "<label>";
+            echo "<input type='radio' name='q$i' value='$option' required> $option";
+            echo "</label><br>";
+        }
+        echo "</fieldset><br>";
+        $i++;
+    }
+    ?>
+    <input type="submit" value="Submit Quiz">
+</form>
